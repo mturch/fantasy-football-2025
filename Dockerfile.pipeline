@@ -1,0 +1,44 @@
+# Dockerfile for SageMaker Pipeline
+FROM python:3.11-slim
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+RUN pip install --upgrade pip && pip install uv
+
+# Set workdir
+WORKDIR /app
+
+# Copy project files
+COPY . .
+
+# Install dependencies
+RUN uv sync --system --no-cache
+
+# Create entrypoint script
+RUN echo '#!/bin/bash\n\
+if [ "$1" = "sleeper" ]; then\n\
+    shift\n\
+    exec uv run python -m fantasy_football_2025.sleeper_client "$@"\n\
+elif [ "$1" = "nfl" ]; then\n\
+    shift\n\
+    exec uv run python -c "import nfl_data_py as nfl; print(\"NFL data module loaded\")"\n\
+elif [ "$1" = "pipeline" ]; then\n\
+    shift\n\
+    exec uv run python -m fantasy_football_2025.pipeline "$@"\n\
+else\n\
+    exec "$@"\n\
+fi' > /entrypoint.sh && chmod +x /entrypoint.sh
+
+# Set entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Default command
+CMD ["uv", "run", "python", "-m", "fantasy_football_2025.pipeline", "--help"] 

@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    container_name: fantasy-football-2025
+    volumes:
+      - .:/app
+    env_file:
+      - .env.example
+    ports:
+      - "8888:8888" # For Jupyter if needed
+    command: ["uv", "run", "python", "-m", "fantasy_football_2025.main"] 

@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile.pipeline
+    container_name: fantasy-football-pipeline
+    environment:
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - LEAGUE_ID=${LEAGUE_ID}
+      - USER_ID=${USER_ID}
+      - SEASON=${SEASON:-2024}
+      - WEEK=${WEEK:-1}
+    volumes:
+      - ./data:/app/data
+      - ~/.aws:/root/.aws:ro
+    command: ["pipeline", "--help"]
+
+  sleeper-data:
+    build:
+      context: .
+      dockerfile: Dockerfile.pipeline
+    container_name: sleeper-data-pull
+    environment:
+      - LEAGUE_ID=${LEAGUE_ID}
+      - USER_ID=${USER_ID}
+      - SEASON=${SEASON:-2024}
+    volumes:
+      - ./data:/app/data
+    command: ["sleeper", "--pull-all", "--league-id", "${LEAGUE_ID}", "--user-id", "${USER_ID}"]
+
+  nfl-data:
+    build:
+      context: .
+      dockerfile: Dockerfile.pipeline
+    container_name: nfl-data-pull
+    environment:
+      - SEASON=${SEASON:-2024}
+      - WEEK=${WEEK:-1}
+    volumes:
+      - ./data:/app/data
+    command: ["python", "-c", "import nfl_data_py as nfl; print('NFL data module ready')"] 
