@@ -8,14 +8,14 @@ export ENVIRONMENT=${ENVIRONMENT:-"DEV"}
 # DEV Database
 export DEV_DB_HOST=${DEV_DB_HOST:-"localhost"}
 export DEV_DB_PORT=${DEV_DB_PORT:-"3306"}
-export DEV_DB_USER=${DEV_DB_USER:-"fantasy_user"}
+export DEV_DB_USER=${DEV_DB_USER:-"fantasy_user_dev"}
 export DEV_DB_PASSWORD=${DEV_DB_PASSWORD:-"fantasy_password"}
 export DEV_DB_NAME=${DEV_DB_NAME:-"fantasy_football_dev"}
 
 # TEST Database
 export TEST_DB_HOST=${TEST_DB_HOST:-"localhost"}
 export TEST_DB_PORT=${TEST_DB_PORT:-"3306"}
-export TEST_DB_USER=${TEST_DB_USER:-"fantasy_user"}
+export TEST_DB_USER=${TEST_DB_USER:-"fantasy_user_test"}
 export TEST_DB_PASSWORD=${TEST_DB_PASSWORD:-"fantasy_password"}
 export TEST_DB_NAME=${TEST_DB_NAME:-"fantasy_football_test"}
 

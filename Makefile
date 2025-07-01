@@ -18,10 +18,9 @@ help:
 install:
 	uv sync
 
-# # Install package in development mode
-# install-dev:
-# 	uv sync --dev
-# 	uv pip install -e .
+# Install package in development mode
+install-dev:
+	@bash -c 'source .venv-DEV/bin/activate && uv sync'
 
 # Install development dependencies
 dev-install:
@@ -219,3 +218,39 @@ run-test:
 
 run-prod:
 	@export ENVIRONMENT=PRODUCTION && source scripts/set_env.sh && make run
+
+# Set environment only (no run)
+set-dev:
+	@export ENVIRONMENT=DEV && source scripts/set_env.sh && echo "ENVIRONMENT set to DEV"
+
+set-test:
+	@export ENVIRONMENT=TEST && source scripts/set_env.sh && echo "ENVIRONMENT set to TEST"
+
+set-prod:
+	@export ENVIRONMENT=PRODUCTION && source scripts/set_env.sh && echo "ENVIRONMENT set to PRODUCTION"
+
+# Create virtual environments
+venv-dev:
+	@test -d .venv-DEV || python3 -m venv .venv-DEV && echo "Created .venv-DEV"
+
+venv-test:
+	@test -d .venv-TEST || python3 -m venv .venv-TEST && echo "Created .venv-TEST"
+
+venv-prod:
+	@test -d .venv-PRODUCTION || python3 -m venv .venv-PRODUCTION && echo "Created .venv-PRODUCTION"
+
+# Activate virtual environments (for interactive shells)
+activate-dev:
+	@bash scripts/activate_env.sh DEV
+
+activate-test:
+	@bash scripts/activate_env.sh TEST
+
+activate-prod:
+	@bash scripts/activate_env.sh PRODUCTION
+
+install-test:
+	@bash -c 'source .venv-TEST/bin/activate && uv sync'
+
+install-prod:
+	@bash -c 'source .venv-PRODUCTION/bin/activate && uv sync'
