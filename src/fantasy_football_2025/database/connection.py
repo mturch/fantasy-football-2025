@@ -5,12 +5,12 @@ import os
 from contextlib import contextmanager
 from typing import Generator, Optional
 
+import pymysql
+from dotenv import load_dotenv
 from python_dotenv import load_dotenv
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
-import pymysql
-from dotenv import load_dotenv
 
 from .models import Base
 
@@ -48,7 +48,9 @@ DB_CONFIGS = {
 def get_db_config():
     env = ENVIRONMENT
     if env not in DB_CONFIGS:
-        raise ValueError(f"Unknown ENVIRONMENT: {env}. Must be one of {list(DB_CONFIGS.keys())}")
+        raise ValueError(
+            f"Unknown ENVIRONMENT: {env}. Must be one of {list(DB_CONFIGS.keys())}"
+        )
     return DB_CONFIGS[env]
 
 
