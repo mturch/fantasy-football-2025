@@ -29,16 +29,16 @@ dev-install:
 
 # Format code
 format:
-	uv run black fantasy_football_2025/ tests/ scripts/
-	uv run isort fantasy_football_2025/ tests/ scripts/
+	uv run black src/fantasy_football_2025/ tests/ scripts/
+	uv run isort src/fantasy_football_2025/ tests/ scripts/
 
 # Lint code
 lint:
-	uv run flake8 fantasy_football_2025/ tests/ scripts/
+	uv run flake8 src/fantasy_football_2025/ tests/ scripts/
 
 # Type check
 type-check:
-	uv run mypy fantasy_football_2025/
+	uv run mypy src/fantasy_football_2025/
 
 # Run all checks
 check: lint type-check test
@@ -200,3 +200,22 @@ aws-test:
 	@echo "Testing AWS connectivity..."
 	aws sts get-caller-identity
 	aws s3 ls
+
+# Environment switching
+env-dev:
+	@export ENVIRONMENT=DEV && source scripts/set_env.sh && echo "Switched to DEV environment"
+
+env-test:
+	@export ENVIRONMENT=TEST && source scripts/set_env.sh && echo "Switched to TEST environment"
+
+env-prod:
+	@export ENVIRONMENT=PRODUCTION && source scripts/set_env.sh && echo "Switched to PRODUCTION environment"
+
+run-dev:
+	@export ENVIRONMENT=DEV && source scripts/set_env.sh && make run
+
+run-test:
+	@export ENVIRONMENT=TEST && source scripts/set_env.sh && make run
+
+run-prod:
+	@export ENVIRONMENT=PRODUCTION && source scripts/set_env.sh && make run

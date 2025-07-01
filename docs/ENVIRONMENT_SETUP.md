@@ -258,4 +258,67 @@ env:
 2. Test the environment setup: `make env-test`
 3. Verify database connection: `make db-verify`
 4. Test weather API: `make pull-weather-stadiums`
-5. Start using the application: `make run` 
+5. Start using the application: `make run`
+
+## Multi-Environment Database Support
+
+This project supports separate database configurations for development, testing, and production environments.
+
+### Environment Variables
+
+Set the `ENVIRONMENT` variable to one of:
+- `DEV`
+- `TEST`
+- `PRODUCTION`
+
+Example in `.env`:
+```env
+ENVIRONMENT=DEV
+```
+
+Each environment uses its own set of variables:
+
+```env
+# DEV Database
+DEV_DB_HOST=localhost
+DEV_DB_PORT=3306
+DEV_DB_USER=fantasy_user
+DEV_DB_PASSWORD=fantasy_password
+DEV_DB_NAME=fantasy_football_dev
+
+# TEST Database
+TEST_DB_HOST=localhost
+TEST_DB_PORT=3306
+TEST_DB_USER=fantasy_user
+TEST_DB_PASSWORD=fantasy_password
+TEST_DB_NAME=fantasy_football_test
+
+# PRODUCTION Database
+PROD_DB_HOST=prod-db-host
+PROD_DB_PORT=3306
+PROD_DB_USER=prod_user
+PROD_DB_PASSWORD=prod_password
+PROD_DB_NAME=fantasy_football_prod
+```
+
+### How It Works
+- The application reads the `ENVIRONMENT` variable.
+- It uses the corresponding database credentials for all connections.
+- Change `ENVIRONMENT` to switch between databases.
+
+### Example Usage
+
+```bash
+# Use DEV database
+export ENVIRONMENT=DEV && source scripts/set_env.sh
+
+# Use TEST database
+export ENVIRONMENT=TEST && source scripts/set_env.sh
+
+# Use PRODUCTION database
+export ENVIRONMENT=PRODUCTION && source scripts/set_env.sh
+```
+
+You can also set these in your `.env` file for persistent configuration.
+
+See `scripts/set_env.sh` for details. 

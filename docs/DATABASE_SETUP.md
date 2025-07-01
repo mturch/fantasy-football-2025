@@ -234,7 +234,7 @@ uv run python scripts/setup_database.py --reset
 
 ### 1. MySQL Configuration
 
-Edit `/etc/mysql/mysql.conf.d/mysqld.cnf` (Linux) or MySQL configuration file:
+Edit `/etc/mysql/mysql.conf.d/mysqld.cnf` MySQL configuration file:
 
 ```ini
 [mysqld]
@@ -278,11 +278,9 @@ CREATE INDEX idx_games_stadium ON games(stadium_name);
 #### 1. Connection Refused
 ```bash
 # Check if MySQL is running
-sudo systemctl status mysql  # Linux
 brew services list | grep mysql  # macOS
 
 # Start MySQL if not running
-sudo systemctl start mysql  # Linux
 brew services start mysql  # macOS
 ```
 
@@ -381,4 +379,49 @@ ENVIRONMENT=production
 
 - [MySQL Documentation](https://dev.mysql.com/doc/)
 - [MySQL Performance Tuning](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
-- [Database Design Best Practices](https://dev.mysql.com/doc/refman/8.0/en/optimization-best-practices.html) 
+- [Database Design Best Practices](https://dev.mysql.com/doc/refman/8.0/en/optimization-best-practices.html)
+
+## Multi-Environment Database Support
+
+This project supports separate databases for development, testing, and production.
+
+### How to Configure
+
+1. Set the `ENVIRONMENT` variable to `DEV`, `TEST`, or `PRODUCTION` in your `.env` or shell.
+2. Set the corresponding database variables for each environment:
+
+```env
+# DEV Database
+DEV_DB_HOST=localhost
+DEV_DB_PORT=3306
+DEV_DB_USER=fantasy_user
+DEV_DB_PASSWORD=fantasy_password
+DEV_DB_NAME=fantasy_football_dev
+
+# TEST Database
+TEST_DB_HOST=localhost
+TEST_DB_PORT=3306
+TEST_DB_USER=fantasy_user
+TEST_DB_PASSWORD=fantasy_password
+TEST_DB_NAME=fantasy_football_test
+
+# PRODUCTION Database
+PROD_DB_HOST=prod-db-host
+PROD_DB_PORT=3306
+PROD_DB_USER=prod_user
+PROD_DB_PASSWORD=prod_password
+PROD_DB_NAME=fantasy_football_prod
+```
+
+### How to Use
+
+- The application will automatically use the correct database based on the `ENVIRONMENT` variable.
+- To switch environments, change `ENVIRONMENT` and reload your environment variables:
+
+```bash
+export ENVIRONMENT=TEST && source scripts/set_env.sh
+```
+
+- This allows you to safely test and develop without affecting production data.
+
+See `docs/ENVIRONMENT_SETUP.md` and `scripts/set_env.sh` for more details. 

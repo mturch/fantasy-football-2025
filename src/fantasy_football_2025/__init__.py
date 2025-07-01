@@ -4,15 +4,16 @@ __version__ = "0.1.0"
 __author__ = "Your Name"
 __email__ = "your.email@example.com"
 
+from .lineup_optimizer import LineupOptimizer
+
 # Import main classes for easy access
 from .sleeper_client import SleeperClient, SleeperConfig
-from .lineup_optimizer import LineupOptimizer
 from .trade_analyzer import TradeAnalyzer
 from .waiver_analyzer import WaiverAnalyzer
 
 __all__ = [
     "SleeperClient",
-    "SleeperConfig", 
+    "SleeperConfig",
     "LineupOptimizer",
     "TradeAnalyzer",
     "WaiverAnalyzer",
